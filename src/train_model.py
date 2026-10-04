@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     X_train, _, _, y_train, _, _ = get_splits()
 
-    model = RandomForestClassifier(n_estimators=100, random_state=0)
+    model = RandomForestClassifier(n_estimators=150, random_state=0)
     model.fit(X_train, y_train)
 
     os.makedirs("models", exist_ok=True)
