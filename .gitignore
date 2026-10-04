@@ -1,0 +1,4 @@
+lab_02/
+__pycache__/
+*.pyc
+.DS_Store

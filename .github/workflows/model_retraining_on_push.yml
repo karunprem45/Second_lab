@@ -1,0 +1,44 @@
+name: Model Retraining on Push
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write   # lets the workflow commit the model back to the repo
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate and store timestamp
+        run: |
+          TS=$(date +'%Y%m%d%H%M%S')
+          echo "TIMESTAMP=$TS" >> $GITHUB_ENV
+          echo "$TS" > timestamp.txt
+
+      - name: Train model
+        run: python src/train_model.py --timestamp "$TIMESTAMP"
+
+      - name: Evaluate model
+        run: python src/evaluate_model.py --timestamp "$TIMESTAMP"
+
+      - name: Commit and push new model version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add models/ metrics/ timestamp.txt
+          git commit -m "Add model version $TIMESTAMP" || echo "Nothing to commit"
+          git pull --rebase origin main
+          git push origin main
