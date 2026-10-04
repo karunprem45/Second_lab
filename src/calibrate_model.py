@@ -10,11 +10,11 @@ from data import get_splits
 
 if __name__ == "__main__":
     # Find the most recent uncalibrated model (timestamps sort in time order)
-    models = sorted(glob.glob("models/model_*_rf.joblib"))
+    models = sorted(glob.glob("models/model_*_gb.joblib"))
     if not models:
         raise SystemExit("No trained model found in models/")
     latest = models[-1]
-    timestamp = latest.split("model_")[1].split("_rf")[0]
+    timestamp = latest.split("model_")[1].split("_gb")[0]
     print(f"Calibrating {latest}")
 
     _, X_cal, X_test, _, y_cal, y_test = get_splits()

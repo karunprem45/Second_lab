@@ -1,12 +1,11 @@
-from sklearn.datasets import make_classification
+from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
 
 def get_splits():
-    """Synthetic binary classification data, split into train / calibration / test."""
-    X, y = make_classification(
-        n_samples=2000, n_features=20, n_informative=10, random_state=42
-    )
+    """Breast Cancer Wisconsin dataset (569 samples, 30 features),
+    split into train (60%) / calibration (20%) / test (20%)."""
+    X, y = load_breast_cancer(return_X_y=True)
     X_train, X_temp, y_train, y_temp = train_test_split(
         X, y, test_size=0.4, random_state=42, stratify=y
     )

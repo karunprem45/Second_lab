@@ -2,7 +2,7 @@ import argparse
 import os
 
 import joblib
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 from data import get_splits
 
@@ -13,10 +13,12 @@ if __name__ == "__main__":
 
     X_train, _, _, y_train, _, _ = get_splits()
 
-    model = RandomForestClassifier(n_estimators=150, random_state=0)
+    model = GradientBoostingClassifier(
+        n_estimators=150, learning_rate=0.1, max_depth=3, random_state=0
+    )
     model.fit(X_train, y_train)
 
     os.makedirs("models", exist_ok=True)
-    path = f"models/model_{args.timestamp}_rf.joblib"
+    path = f"models/model_{args.timestamp}_gb.joblib"
     joblib.dump(model, path)
     print(f"Model saved to {path}")
